@@ -68,71 +68,39 @@ room['treasure'].items_list = {
 David = Player("David",room['outside'])
 
 
-def move_player(user_input):
-
-    if hasattr(David.current_room, f"{user_input}_to"):
-        David.current_room = getattr(David.current_room, f"{user_input}_to")
-        print(f"You entered [{David.current_room.name}]")
-        print(f"{David.current_room.description}")
-    else:
-    
-        print("=======No Door To Next Room=======")
-    gaming_running()
 
 def not_valid_needed():
     print("Please enter a valid command, or q to quit the game!")
     gaming_running()
 
-def take_item(item):
-    present = 0
-    for key, value in David.current_room.items_list.items():
-        if value.name.lower() == item:
-            David.inventory.append(value)
-            value.on_take()
-            present = 1
-            number = key
-    if present == 1:
-        David.current_room.items_list.pop(number)
-    else:
-        print("That item isn't in this room!")
-    
-    gaming_running()
 
-def drop_item(item):
-    present = 0
-    for i in range(len(David.inventory)):
-        if David.inventory[i].name.lower() == item:
-            David.current_room_items.items_list[David.inventory[i].name] = David.inventory[i]
-
-            David.inventory[i].on_drop()
-            David.inventory.pop(x)
-            present = 1
-    if present == 0:
-        print(f"Your item, {item}, is not with you")
-    gaming_running()
 
 def gaming_running():
     
     #current location
     print(f"\nCurrent Location =>{David.current_room.name}\n{David.current_room.description}")
 
-    print("This room has:")
-    if len(David.current_room.items_list) == 0:
-        print("There are no items in this room")
-    else:
-        for key, value in David.current_room.items_list.items():
-            print(f"{value.name}:{value.description}")
-    print("\n")
-    user_input= input("Your Character wants to move either [s]outh, [n]orth, [w]est, [e]ast, [I]nventory, or if you want quit type [q]uit:").lower().split(" ")
+    # print("This room has:")
+    # if len(David.current_room.items_list) == 0:
+    #     print("There are no items in this room")
+    
+    # else:
+    #     for key, value in David.current_room.items_list.items():
+    #         print(f"{value.name}:{value.description}")
+    # print("\n")
+    user_input= input("Your Character wants to move either [s]outh, [n]orth, [w]est, [e]ast, [I]nventory, [f]ind, or if you want quit type [q]uit:").lower().split(" ")
     if len(user_input) == 1:
         user_input = user_input[0]
         if user_input == "q":
             print("Dr. Strange says `We are in the endgame now`")
+        elif user_input == "f":
+            David.search()
         elif user_input =="i":
             David.print_inventory()
             gaming_running()
         elif user_input == "n" or user_input == "e" or user_input == "s" or user_input == "w":
-          move_player(user_input)
+          David.move_player(user_input)
+          gaming_running()
         else:
            not_valid_needed()
     elif len(user_input) == 2: 
